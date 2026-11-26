@@ -1,5 +1,7 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
+import { notFoundHandler } from "./middlewares/not-found.middleware";
+import { globalError } from "./middlewares/global-error";
 
 const app = express()
 
@@ -13,7 +15,11 @@ app.get("/", (req: Request, res: Response) => {
         success: true,
         message: "EventHive API is running!"
     })
-})
+});
+
+
+app.use(notFoundHandler);
+app.use(globalError);
 
 
 export default app;
