@@ -1,9 +1,10 @@
 {
   "name": "eventhive-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Event and Ticket Booking Platform",
   "main": "server.ts",
   "scripts": {
+     "dev": "tsx watch src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
