@@ -27,6 +27,17 @@ const tableQuery =
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS bookings(
+        id SERIAL PRIMARY KEY,
+        event_id INT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+        attendee_id INT NOT NULL REFERENCES users(id),
+        tickets_booked INT NOT NULL CHECK(tickets_booked>0),
+        total_price NUMERIC(10,2) NOT NULL,
+        status VARCHAR(50) NOT NULL CHECK(status IN ('confirmed','cancelled')) DEFAULT 'confirmed',
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
     `
 export const pool = new Pool({
     connectionString: config.dbUrl
