@@ -1,5 +1,5 @@
 import { AppError } from "../../errors/app-errors";
-import type { ICreateEvent } from "./event.interface"
+import type { ICreateEvent, IUpdateEvent } from "./event.interface"
 import { eventRepo } from "./event.repository";
 
 const createEventIntoDb = async (payload: ICreateEvent, organizerId: number) => {
@@ -22,6 +22,27 @@ const getEventById = async (id: number) => {
     return result;
 };
 
+const checkEventOwner = async (id: number, organizerId: number) => {
+    const event = await eventRepo.getEventOwner(id)
+    if (!event) {
+        throw new AppError("Event not found", 404)
+    }
+
+    if (event.organizer_id !== organizerId) {
+        throw new AppError("You are not the owner of this event", 403);
+    }
+    return event;
+}
+
+
+const updateEventIntoDb = async (payload: IUpdateEvent, id: number, organizerId: number,) => {
+
+    await checkEventOwner(id, organizerId)
+
+    const result = await eventRepo.updateEvent(payload, id)
+    return result
+}
+
 export const eventService = {
-    createEventIntoDb, getAllEventsFromDb, getEventById
+    createEventIntoDb, getAllEventsFromDb, getEventById, checkEventOwner, updateEventIntoDb
 }

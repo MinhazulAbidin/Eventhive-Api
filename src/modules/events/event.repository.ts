@@ -1,5 +1,5 @@
 import { pool } from "../../config/db";
-import type { ICreateEvent, IEvent } from "./event.interface"
+import type { ICreateEvent, IEvent, IUpdateEvent } from "./event.interface"
 
 interface IEventWithOrganizer extends IEvent {
     organizer: {
@@ -46,6 +46,32 @@ const getSingleEvent = async (id: number) => {
     return result.rows[0]
 }
 
+const getEventOwner = async (id: number) => {
+    const result = await pool.query(`SELECT id,organizer_id FROM events WHERE id=$1`, [id])
+    return result.rows[0]
+}
+
+
+const updateEvent = async (payload: IUpdateEvent, id: number) => {
+    const { title, description, category, location, date, total_seats, price } = payload
+
+    const result = await pool.query(`UPDATE events 
+        SET 
+            title=COALESCE($1,title), 
+            description=COALESCE($2,description), 
+            category=COALESCE($3,category),
+            location=COALESCE($4,location), 
+            date=COALESCE($5,date),
+            total_seats=COALESCE($6,total_seats), 
+            price=COALESCE($7,price),
+            updated_at = CURRENT_TIMESTAMP
+            WHERE id=$8 RETURNING *
+          `,
+        [title ?? null, description ?? null, category ?? null, location ?? null, date ?? null, total_seats ?? null, price ?? null, id]
+    )
+    return result.rows[0]
+}
+
 export const eventRepo = {
-    createEvent, getAllEvent, getSingleEvent
+    createEvent, getAllEvent, getSingleEvent, getEventOwner, updateEvent
 }

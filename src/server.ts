@@ -4,9 +4,7 @@ import { initDB } from "./config/db"
 
 const main = () => {
     app.listen(config.port, () => {
-
         try {
-
             initDB()
             console.log(`Server is running on ${config.port}`)
         } catch (error) {

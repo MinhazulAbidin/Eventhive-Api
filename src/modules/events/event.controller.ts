@@ -59,7 +59,20 @@ const getSingleEvent: RequestHandler = async (req, res, next) => {
 }
 const updateEvent: RequestHandler = async (req, res, next) => {
     try {
-
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id) || id <= 0) {
+            throw new AppError("Invalid event ID", 400);
+        }
+        if (!req.user) {
+            throw new AppError("Unauthorized access", 401);
+        }
+        const result = await eventService.updateEventIntoDb(req.body, id, Number(req.user.id))
+        apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "Event update successfully",
+            data: result
+        })
     } catch (error) {
         next(error)
     }
