@@ -3,7 +3,7 @@ import type { IAuthUser } from "../modules/auth/auth.interface";
 declare global {
     namespace Express {
         interface Request {
-            users?: IAuthUser
+            user?: IAuthUser
         }
     }
 }

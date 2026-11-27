@@ -10,21 +10,40 @@ export const globalError: ErrorRequestHandler = (
     next
 ) => {
 
-
     if (res.headersSent) {
         return next(error);
     }
 
     if (error instanceof AppError) {
-        apiResponse(res, { statusCode: error.statusCode, message: error.message, success: false });
-        return;
+        return apiResponse(res, {
+            success: false,
+            statusCode: error.statusCode,
+            message: error.message,
+            error: {
+                statusCode: error.statusCode,
+                details: error.details
+            }
+        });
     }
 
-    apiResponse(res, { statusCode: 500, message: "Internal Server Error", success: false, })
-    res.status(500).json({
+    if (error.code === "23505") {
+        return apiResponse(res, {
+            success: false,
+            statusCode: 409,
+            message: "Email already exists",
+            error: {
+                statusCode: 409,
+                details: []
+            }
+        });
+    }
+
+    return apiResponse(res, {
         success: false,
-        message: "Internal Server Error",
+        statusCode: 500,
+        message: "Internal server error",
         error: {
+            statusCode: 500,
             details: []
         }
     });

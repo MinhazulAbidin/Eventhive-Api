@@ -1,26 +1,29 @@
 import type { Response } from "express";
 
-interface ApiResponseTypes<T> {
+interface ApiResponse<T> {
     statusCode?: number;
     message: string;
-    data?: T;
-    success: boolean
-    error?: any
+    data?: T | null;
+    success: boolean;
+    error?: unknown;
 }
 
-export const apiResponse = <T>(res: Response, payload: ApiResponseTypes<T>) => {
+export const apiResponse = <T>(
+    res: Response,
+    payload: ApiResponse<T>
+) => {
     const {
         statusCode = 200,
         message,
         success,
-        data = null,
-        error = null
+        data,
+        error
     } = payload;
 
     return res.status(statusCode).json({
         success,
         message,
-        ...(data !== undefined && { data }),
-        ...(error !== undefined && { error })
+        ...(data != null && { data }),
+        ...(error != null && { error })
     });
 };

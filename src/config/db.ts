@@ -11,9 +11,22 @@ const tableQuery =
         role VARCHAR(50) CHECK(role IN ('attendee', 'organizer')) DEFAULT 'attendee',
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )
-        
+    );
     
+    CREATE TABLE IF NOT EXISTS events(
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        category VARCHAR(100) NOT NULL,
+        date TIMESTAMP NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        total_seats INT NOT NULL CHECK(total_seats>0),
+        available_seats INT NOT NULL CHECK(available_seats >= 0 AND available_seats <=total_seats),
+        price NUMERIC(10,2) NOT NULL CHECK(price>=0),
+        organizer_id INT NOT NULL REFERENCES users(id),
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
     `
 export const pool = new Pool({
     connectionString: config.dbUrl
