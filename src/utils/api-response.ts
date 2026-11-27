@@ -20,7 +20,7 @@ export const apiResponse = <T>(res: Response, payload: ApiResponseTypes<T>) => {
     return res.status(statusCode).json({
         success,
         message,
-        data,
-        error
+        ...(data !== undefined && { data }),
+        ...(error !== undefined && { error })
     });
 };

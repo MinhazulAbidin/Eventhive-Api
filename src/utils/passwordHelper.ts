@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 
 const hashPass = (text: string) => {
     const hashPassword = bcrypt.hashSync(text, 8);
-    return hashPass
+    return hashPassword
 }
 
 
