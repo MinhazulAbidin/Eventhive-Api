@@ -3,6 +3,7 @@ import cors from "cors";
 import { notFoundHandler } from "./middlewares/not-found.middleware";
 import { globalError } from "./middlewares/global-error";
 import { authRouter } from "./modules/auth/auth.route";
+import { eventRoute } from "./modules/events/event.route";
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/event", eventRoute)
 
 
 app.get("/", (req: Request, res: Response) => {
