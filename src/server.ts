@@ -1,6 +1,6 @@
 import app from "./app"
 import config from "./config"
-import { initDB } from "./database/db"
+import { initDB } from "./config/db"
 
 const main = () => {
     app.listen(config.port, () => {

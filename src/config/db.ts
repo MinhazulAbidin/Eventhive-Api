@@ -1,4 +1,6 @@
-import { pool } from './index';
+import { Pool } from "pg";
+import config from ".";
+
 
 const tableQuery =
     `CREATE TABLE IF NOT EXISTS users(
@@ -13,7 +15,9 @@ const tableQuery =
         
     
     `
-
+export const pool = new Pool({
+    connectionString: config.dbUrl
+})
 
 export const initDB = async () => {
     await pool.query(tableQuery);
