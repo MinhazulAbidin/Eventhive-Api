@@ -7,3 +7,8 @@ export interface IUser {
     created_at?: Date;
     updated_at?: Date;
 }
+
+export interface IAuthUser {
+    id: number;
+    role: 'attendee' | 'organizer';
+}
