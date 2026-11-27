@@ -3,5 +3,7 @@ export interface IUser {
     name: string,
     email: string,
     password: string,
-    role: 'attendee' | 'organizer'
+    role?: 'attendee' | 'organizer',
+    created_at?: Date;
+    updated_at?: Date;
 }

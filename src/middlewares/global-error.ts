@@ -1,6 +1,7 @@
 
 import type { ErrorRequestHandler } from "express";
 import { AppError } from "../errors/app-errors";
+import { apiResponse } from "../utils/api-response";
 
 export const globalError: ErrorRequestHandler = (
     error,
@@ -15,17 +16,11 @@ export const globalError: ErrorRequestHandler = (
     }
 
     if (error instanceof AppError) {
-        res.status(error.statusCode).json({
-            success: false,
-            message: error.message,
-            error: {
-                details: error.details
-            }
-        });
-
+        apiResponse(res, { statusCode: error.statusCode, message: error.message, success: false });
         return;
     }
 
+    apiResponse(res, { statusCode: 500, message: "Internal Server Error", success: false, })
     res.status(500).json({
         success: false,
         message: "Internal Server Error",
