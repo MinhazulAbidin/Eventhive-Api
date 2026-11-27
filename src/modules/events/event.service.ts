@@ -6,8 +6,11 @@ const createEventIntoDb = async (payload: ICreateEvent, organizerId: number) => 
     return result;
 }
 
-
+const getAllEventsFromDb = async (search: string) => {
+    const result = await eventRepo.getAllEvent(search)
+    return result
+}
 
 export const eventService = {
-    createEventIntoDb
+    createEventIntoDb, getAllEventsFromDb
 }

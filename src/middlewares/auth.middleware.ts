@@ -9,7 +9,7 @@ const auth: RequestHandler = (req, res, next) => {
         if (!authHeader) {
             throw new AppError("Unauthorized access!!", 401)
         }
-        const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader
+        const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader
         if (!token) {
             throw new AppError("Unauthorized access!!", 401)
         }

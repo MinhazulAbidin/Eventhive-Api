@@ -5,7 +5,7 @@ import { apiResponse } from "../../utils/api-response";
 
 const createEvent: RequestHandler = async (req, res, next) => {
     try {
-        
+
         if (!req.user) {
             throw new AppError("Unauthorized access", 401);
         }
@@ -24,7 +24,17 @@ const createEvent: RequestHandler = async (req, res, next) => {
 }
 const getAllEvent: RequestHandler = async (req, res, next) => {
     try {
-
+        const search =
+            typeof req.query.search === "string"
+                ? req.query.search
+                : undefined;
+        const result = await eventService.getAllEventsFromDb(search as string)
+        apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "All events fetch successfully!!",
+            data: result
+        })
     } catch (error) {
         next(error)
     }
