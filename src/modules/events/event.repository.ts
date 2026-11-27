@@ -1,5 +1,14 @@
 import { pool } from "../../config/db";
-import type { ICreateEvent } from "./event.interface"
+import type { ICreateEvent, IEvent } from "./event.interface"
+
+interface IEventWithOrganizer extends IEvent {
+    organizer: {
+        id: number;
+        name: string;
+        email: string;
+    };
+}
+
 
 const createEvent = async (payload: ICreateEvent, organizer_id: number) => {
     const { title, description, category, date, location, total_seats, price } = payload;
@@ -27,6 +36,16 @@ const getAllEvent = async (search: string) => {
     return result.rows
 }
 
+const getSingleEvent = async (id: number) => {
+    const result = await pool.query(`SELECT e.*, json_build_object(
+        'id',u.id,
+        'name',u.name,
+        'email',u.email
+        ) AS organizer FROM events AS e INNER JOIN users AS u ON e.organizer_id=u.id WHERE e.id=$1`, [id])
+
+    return result.rows[0]
+}
+
 export const eventRepo = {
-    createEvent, getAllEvent
+    createEvent, getAllEvent, getSingleEvent
 }

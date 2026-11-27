@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use("/api/v1/auth", authRouter)
-app.use("/api/v1/event", eventRoute)
+app.use("/api/v1/events", eventRoute)
 
 
 app.get("/", (req: Request, res: Response) => {

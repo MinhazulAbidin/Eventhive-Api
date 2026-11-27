@@ -6,5 +6,6 @@ const route = Router()
 
 route.post("/", authMiddleware.auth, authMiddleware.authorizedRoles("organizer"), eventController.createEvent)
 route.get("/", eventController.getAllEvent)
+route.get("/:id", eventController.getSingleEvent)
 
 export const eventRoute = route;

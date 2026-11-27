@@ -41,7 +41,18 @@ const getAllEvent: RequestHandler = async (req, res, next) => {
 }
 const getSingleEvent: RequestHandler = async (req, res, next) => {
     try {
+        const id = Number(req.params.id);
 
+        if (!Number.isInteger(id) || id <= 0) {
+            throw new AppError("Invalid event ID", 400);
+        }
+        const result = await eventService.getEventById(id);
+        apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "Event retrieved successfully",
+            data: result
+        })
     } catch (error) {
         next(error)
     }
