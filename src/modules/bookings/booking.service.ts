@@ -1,4 +1,5 @@
 import { AppError } from "../../errors/app-errors";
+import { eventService } from "../events/event.service";
 import type { ICreateBooking } from "./booking.interface";
 import { bookingRepository } from "./booking.repository";
 

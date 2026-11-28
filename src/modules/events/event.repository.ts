@@ -54,7 +54,6 @@ const getEventOwner = async (id: number) => {
 
 const updateEvent = async (payload: IUpdateEvent, id: number) => {
     const { title, description, category, location, date, total_seats, price } = payload
-
     const result = await pool.query(`UPDATE events 
         SET 
             title=COALESCE($1,title), 
@@ -72,6 +71,21 @@ const updateEvent = async (payload: IUpdateEvent, id: number) => {
     return result.rows[0]
 }
 
+
+const getConfirmBookingCount = async (eventId: number) => {
+    const result = pool.query(`
+            SELECT COUNT(*)::INT AS count FROM bookings WHERE event_id=$1 AND status='confirmed'
+        `, [eventId])
+    return (await result).rows[0].count;
+}
+
+const deleteEvent = async (id: number) => {
+    const result = await pool.query(`
+        DELETE FROM events WHERE id=$1 RETURNING *`, [id])
+
+    return result
+}
+
 export const eventRepo = {
-    createEvent, getAllEvent, getSingleEvent, getEventOwner, updateEvent
+    createEvent, getAllEvent, getSingleEvent, getEventOwner, updateEvent, getConfirmBookingCount, deleteEvent
 }

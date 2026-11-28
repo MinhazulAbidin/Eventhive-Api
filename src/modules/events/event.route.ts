@@ -8,5 +8,6 @@ route.post("/", authMiddleware.auth, authMiddleware.authorizedRoles("organizer")
 route.get("/", eventController.getAllEvent)
 route.get("/:id", eventController.getSingleEvent)
 route.patch("/:id", authMiddleware.auth, authMiddleware.authorizedRoles("organizer"), eventController.updateEvent)
+route.delete("/:id", authMiddleware.auth, authMiddleware.authorizedRoles("organizer"), eventController.deleteEvent)
 
 export const eventRoute = route;

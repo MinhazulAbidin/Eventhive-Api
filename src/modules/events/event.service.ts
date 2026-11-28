@@ -43,6 +43,17 @@ const updateEventIntoDb = async (payload: IUpdateEvent, id: number, organizerId:
     return result
 }
 
+const deleteEvent = async (id: number, organizerId: number) => {
+    await checkEventOwner(id, organizerId)
+    const isConfirm = await eventRepo.getConfirmBookingCount(id)
+
+    if (isConfirm > 0) {
+        throw new AppError("Cannot delete event with confirmed bookings", 400);
+    }
+
+    const result = await eventRepo.deleteEvent(id);
+}
+
 export const eventService = {
-    createEventIntoDb, getAllEventsFromDb, getEventById, checkEventOwner, updateEventIntoDb
+    createEventIntoDb, getAllEventsFromDb, getEventById, checkEventOwner, updateEventIntoDb, deleteEvent
 }

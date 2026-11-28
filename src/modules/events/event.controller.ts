@@ -79,7 +79,24 @@ const updateEvent: RequestHandler = async (req, res, next) => {
 }
 const deleteEvent: RequestHandler = async (req, res, next) => {
     try {
+        const id = Number(req.params.id);
 
+        if (!Number.isInteger(id) || id <= 0) {
+            throw new AppError("Invalid event ID", 400);
+        }
+
+        if (!req.user) {
+            throw new AppError("Unauthorized access", 401);
+        }
+
+        await eventService.deleteEvent(id, req.user.id);
+
+        return apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "Event deleted successfully",
+            data: null
+        });
     } catch (error) {
         next(error)
     }

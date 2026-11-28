@@ -23,7 +23,7 @@ export const apiResponse = <T>(
     return res.status(statusCode).json({
         success,
         message,
-        ...(data != null && { data }),
+        ...(data !== undefined && { data }),
         ...(error != null && { error })
     });
 };
