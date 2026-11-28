@@ -30,6 +30,26 @@ const createBooking: RequestHandler = async (req, res, next) => {
 
 }
 
+
+const getUserBooking: RequestHandler = async (req, res, next) => {
+    try {
+        if (!req.user) {
+            throw new AppError("Unauthorized access", 401);
+        }
+        const result = await bookingService.getUserBookings(req.user.id);
+
+        return apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "Bookings retrieved successfully",
+            data: result
+        });
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const bookingController = {
-    createBooking
+    createBooking, getUserBooking
 };

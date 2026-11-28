@@ -5,5 +5,6 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 const router = Router()
 
 router.post("/", authMiddleware.auth, bookingController.createBooking)
+router.get("/", authMiddleware.auth, bookingController.getUserBooking)
 
 export const bookingRouter = router

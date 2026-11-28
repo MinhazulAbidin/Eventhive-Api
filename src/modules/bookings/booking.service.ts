@@ -26,11 +26,17 @@ const createBooking = async (payload: ICreateBooking, attendeeId: number) => {
         throw new AppError("Insufficient available seats for this event", 400);
     }
     const result = await bookingRepository.createBooking(payload, attendeeId, totalPrice)
-   
+
     return result
 }
 
+const getUserBookings = async (attendeeId: number) => {
+    const result = await bookingRepository.getOneUserBookings(attendeeId);
+
+    return result;
+};
+
 
 export const bookingService = {
-    createBooking
+    createBooking, getUserBookings
 };

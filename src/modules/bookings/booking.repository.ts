@@ -35,6 +35,24 @@ const updateAvailableSeats = async (eventId: number, ticketsBooked: number) => {
     return result.rows[0]
 }
 
+const getOneUserBookings = async (attendeeId: number) => {
+    const result = await pool.query(`
+        SELECT b.id,
+        json_build_object(
+            'id',e.id,
+            'title', e.title,
+            'date', e.date,
+            'location', e.location
+        ) AS events,
+            b.tickets_booked,
+            b.total_price,
+            b.status,
+            b.created_at
+        FROM bookings AS b INNER JOIN events AS e ON b.event_id = e.id WHERE b.attendee_id = $1 ORDER BY b.created_at DESC`, [attendeeId])
+    return result.rows
+}
+
+
 export const bookingRepository = {
-    getEventForBooking, createBooking, updateAvailableSeats
+    getEventForBooking, createBooking, updateAvailableSeats, getOneUserBookings
 };

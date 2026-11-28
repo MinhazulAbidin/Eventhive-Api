@@ -21,3 +21,17 @@ export interface IBookingEvent {
     available_seats: number;
     price: string;
 }
+
+export interface IBookingHistory {
+    id: number,
+    event: {
+        id: number,
+        title: string,
+        date: Date;
+        location: string;
+    },
+    tickets_booked: number;
+    total_price: string;
+    status: "confirmed" | "cancelled";
+    created_at: Date;
+}
