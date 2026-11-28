@@ -50,6 +50,32 @@ const getUserBooking: RequestHandler = async (req, res, next) => {
     }
 }
 
+const cancelBookings: RequestHandler = async (req, res, next) => {
+    try {
+        const bookingId = Number(req.params.id);
+
+        if (!Number.isInteger(bookingId) || bookingId <= 0) {
+            throw new AppError("Invalid booking id.", 400)
+        }
+
+        if (!req.user) {
+            throw new AppError("Unauthorized access", 401);
+        }
+
+        const result = await bookingService.cancelBooking(bookingId, req.user.id)
+
+        return apiResponse(res, {
+            success: true,
+            statusCode: 200,
+            message: "Booking cancelled successfully",
+            data: result
+        });
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const bookingController = {
-    createBooking, getUserBooking
+    createBooking, getUserBooking, cancelBookings
 };

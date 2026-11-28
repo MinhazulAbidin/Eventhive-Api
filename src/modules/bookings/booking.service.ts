@@ -36,7 +36,31 @@ const getUserBookings = async (attendeeId: number) => {
     return result;
 };
 
+const cancelBooking = async (bookingId: number, attendeeId: number) => {
+    const booking = await bookingRepository.getBookingForCancel(bookingId);
+
+    if (!booking) {
+        throw new AppError("Booking is not found", 404)
+    }
+
+    if (booking.attendee_id !== attendeeId) {
+        throw new AppError("You are not allowed to cancel this booking", 403)
+    }
+
+    if (booking.status === "cancelled") {
+        throw new AppError("Booking already cancelled", 409)
+    }
+
+    if (new Date(booking.date).getTime() <= Date.now()) {
+        throw new AppError("Cannot cancel booking after event has started", 400);
+    }
+
+    const result = await bookingRepository.updateBookingStatus(bookingId)
+
+    await bookingRepository.restoreAvailableSeats(booking.event_id, booking.tickets_booked);
+    return result
+}
 
 export const bookingService = {
-    createBooking, getUserBookings
+    createBooking, getUserBookings, cancelBooking
 };
